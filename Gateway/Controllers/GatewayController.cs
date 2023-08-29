@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using PostsContracts;
 using CommentsContracts;
 using Gateway.Models;
-using Microsoft.AspNetCore.Components.Routing;
 using Gateway.Clients;
 using AutoMapper;
 using Gateway.Services;
