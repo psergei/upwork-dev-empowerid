@@ -1,12 +1,19 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using PostsContracts;
 using PostsService.Repositories;
+using PostsService.Services;
 
 namespace PostsService.Controllers;
 
+/// <summary>
+/// Minimal-api-style controller
+/// </summary>
 public static class PostsController
 {
-  // Here we define all possible routes for the API
+  /// <summary>
+  /// Here we define all possible routes for the API
+  /// </summary>
+  /// <param name="routes"></param>
   public static void MapPostsControllerEndpoints(this IEndpointRouteBuilder routes)
   {
     var group = routes.MapGroup("/api/posts");

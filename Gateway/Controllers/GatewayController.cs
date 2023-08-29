@@ -8,12 +8,16 @@ using Gateway.Services;
 
 namespace Gateway.Controllers;
 
+/// <summary>
+/// Public API facade controller
+/// </summary>
 public static class GatewayController
 {
-  private static Mapper _mapper;
+  private readonly static Mapper _mapper;
 
   static GatewayController()
   {
+    // Define automatic mappers for DTO, input/output models
     _mapper = new Mapper(new MapperConfiguration(cfg => 
     {
       cfg.CreateMap<BlogPost, BlogPostView>();
@@ -23,9 +27,13 @@ public static class GatewayController
     }));
   }
 
-  // Here we define all possible routes for the API
+  /// <summary>
+  /// Here we define all possible routes for the API
+  /// </summary>
+  /// <param name="routes"></param>
+  /// <param name="readDataPolicy"></param>
+  /// <param name="writeDataPolicy"></param>
   public static void MapGatewayControllerEndpoints(this IEndpointRouteBuilder routes, 
-    IConfiguration configuration,
     string readDataPolicy, string writeDataPolicy)
   {
     ConfigureRoutes(routes, readDataPolicy, writeDataPolicy);
@@ -120,6 +128,12 @@ public static class GatewayController
     return TypedResults.Ok();
   }
 
+  /// <summary>
+  /// Define routes configuration for gateway
+  /// </summary>
+  /// <param name="routes"></param>
+  /// <param name="readDataPolicy">rate-limit policy for read operations</param>
+  /// <param name="writeDataPolicy">rate0limit policy for write operations</param>
   private static void ConfigureRoutes(IEndpointRouteBuilder routes, string readDataPolicy, string writeDataPolicy)
   {
     var groupPosts = routes.MapGroup("/api/posts");

@@ -1,6 +1,11 @@
 using Azure.Messaging.ServiceBus;
 using CommentsService.Repositories;
 
+namespace CommentsService.Services;
+
+/// <summary>
+/// Hosted service for Azure ServiceBus listening
+/// </summary>
 public class QueueService : IHostedService, IDisposable
 {
   private readonly string _connectionString;
@@ -33,12 +38,12 @@ public class QueueService : IHostedService, IDisposable
     _processor.ProcessMessageAsync += MessageHandler;
     _processor.ProcessErrorAsync += ErrorHandler;
 
-    await _processor.StartProcessingAsync();
+    await _processor.StartProcessingAsync(cancellationToken);
   }
 
   public async Task StopAsync(CancellationToken cancellationToken)
   {
-    await _processor.StopProcessingAsync();
+    await _processor.StopProcessingAsync(cancellationToken);
   }
 
   protected virtual async void Dispose(bool disposing)
@@ -49,6 +54,11 @@ public class QueueService : IHostedService, IDisposable
     }
   }
 
+  /// <summary>
+  /// Handle message from service bus queue
+  /// </summary>
+  /// <param name="args"></param>
+  /// <returns></returns>
   private async Task MessageHandler(ProcessMessageEventArgs args)
   {
     string body = args.Message.Body.ToString();
@@ -67,6 +77,11 @@ public class QueueService : IHostedService, IDisposable
     }
   }
 
+  /// <summary>
+  /// Handle error, just do nothing yet
+  /// </summary>
+  /// <param name="args"></param>
+  /// <returns></returns>
   private Task ErrorHandler(ProcessErrorEventArgs args)
   {
     Console.WriteLine(args.Exception.ToString());

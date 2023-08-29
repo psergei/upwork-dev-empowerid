@@ -9,8 +9,8 @@ public interface IBlogApiClient
   Task<IEnumerable<BlogPost>?> GetAllPosts();
   Task<BlogPost?> GetPostById(Guid id);
   Task CreatePost(BlogPost post);
-  Task UpdatePost(Guid id, BlogPost post);
-  Task DeletePost(Guid id);
-  Task CreateComment(PostComment comment);
+  Task<bool> UpdatePost(Guid id, BlogPost post);
+  Task<bool> DeletePost(Guid id);
+  Task<bool> CreateComment(PostComment comment);
   Task<IEnumerable<PostComment>?> GetPostComments(Guid postId);
 }

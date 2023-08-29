@@ -48,7 +48,9 @@ builder.Services.AddRateLimiter(options => options
     limiter.QueueLimit = 2;
   }));
 
+// Add retry/circuit breaker for BlogApi and also handler for certificate errors
 builder.Services.AddHttpClient<IBlogApiClient, BlogApiClient>()
+  .ConfigurePrimaryHttpMessageHandler(configHandler => GetMessageHandler())
   .AddPolicyHandler(GetRetryPolicy())
   .AddPolicyHandler(GetCircuitBreakerPolicy());
 
@@ -72,11 +74,14 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseHttpsRedirection();
 
-app.MapGatewayControllerEndpoints(app.Configuration,
-  readDataPolicy, writeDataPolicy);
+app.MapGatewayControllerEndpoints(readDataPolicy, writeDataPolicy);
 
 app.Run();
 
+/// <summary>
+/// Define simple retry policy
+/// </summary>
+/// <returns></returns>
 static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
 {
   return HttpPolicyExtensions
@@ -84,9 +89,28 @@ static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
     .WaitAndRetryAsync(2, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 }
 
+/// <summary>
+/// Define simple circuit breaker policy
+/// </summary>
+/// <returns></returns>
 static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
 {
   return HttpPolicyExtensions
     .HandleTransientHttpError()
     .CircuitBreakerAsync(3, TimeSpan.FromSeconds(10));
+}
+
+/// <summary>
+/// Workaround for non-truested development certificates, still having issues under Ubuntu
+/// </summary>
+/// <returns></returns>
+static HttpClientHandler GetMessageHandler()
+{
+  return new HttpClientHandler
+  {
+    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
+    {
+      return true;
+    }
+  };
 }

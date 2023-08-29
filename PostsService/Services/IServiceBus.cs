@@ -1,6 +1,6 @@
 using PostsContracts;
 
-namespace PostsService.Repositories;
+namespace PostsService.Services;
 
 public interface IServiceBus
 {

@@ -4,9 +4,15 @@ using CommentsService.Repositories;
 
 namespace CommentsService.Controllers;
 
+/// <summary>
+/// Minimal-api-style controller
+/// </summary>
 public static class CommentsController
 {
-  // Here we define all possible routes for the API
+  /// <summary>
+  /// Here we define all possible routes for the API
+  /// </summary>
+  /// <param name="routes"></param>
   public static void MapCommentsControllerEndpoints(this IEndpointRouteBuilder routes)
   {
     var group = routes.MapGroup("/api/comments");

@@ -1,13 +1,13 @@
 using CommentsService.Controllers;
 using CommentsService.Repositories;
+using CommentsService.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("Database");
-
 builder.Services.AddDbContext<ApiDbContext>(options =>
 {
+  var connectionString = builder.Configuration.GetConnectionString("Database");
   options.UseSqlServer(connectionString);
 });
 

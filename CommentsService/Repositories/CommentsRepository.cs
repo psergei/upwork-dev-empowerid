@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CommentsService.Repositories;
 
+/// <summary>
+/// Blog post comments repository 
+/// </summary>
 public class CommentsRepository : ICommentsRepository
 {
   private readonly ApiDbContext _context;
@@ -14,6 +17,11 @@ public class CommentsRepository : ICommentsRepository
     _comments = context.Set<PostComment>();
   }
 
+  /// <summary>
+  /// Returns specific post comments
+  /// </summary>
+  /// <param name="postId">Post Id</param>
+  /// <returns>comments list</returns>
   public async Task<IEnumerable<PostComment>> GetPostComments(Guid postId)
   {
     return await _comments
@@ -21,14 +29,22 @@ public class CommentsRepository : ICommentsRepository
       .Where(c => c.PostId == postId).ToListAsync();
   }
 
+  /// <summary>
+  /// Adds a new comment
+  /// </summary>
+  /// <param name="comment"></param>
   public void AddComment(PostComment comment)
   {
     _comments.Add(comment);
   }
 
+  /// <summary>
+  /// Delete all post comments
+  /// </summary>
+  /// <param name="postId">Post Id</param>
   public void DeletePostComments(Guid postId)
   {
-    // NB: acoid use of EF for such things, consider direct SQL to delete records
+    // NB: avoid use of EF for such things, consider direct SQL to delete records
     // other may hit peformance issues on large posts
     var postComments = _comments
       .AsNoTracking()
@@ -36,6 +52,10 @@ public class CommentsRepository : ICommentsRepository
     _comments.RemoveRange(postComments);
   }
 
+  /// <summary>
+  /// Save pending changes to the database
+  /// </summary>
+  /// <returns></returns>
   public async Task<bool> SaveChangesAsync()
   {
     return await _context.SaveChangesAsync() > 0;

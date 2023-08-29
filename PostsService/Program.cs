@@ -1,15 +1,13 @@
-
-
 using Microsoft.EntityFrameworkCore;
 using PostsService.Controllers;
 using PostsService.Repositories;
+using PostsService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("Database");
-
 builder.Services.AddDbContext<ApiDbContext>(options =>
 {
+  var connectionString = builder.Configuration.GetConnectionString("Database");
   options.UseSqlServer(connectionString);
 });
 

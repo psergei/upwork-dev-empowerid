@@ -2,7 +2,7 @@ using System.Text.Json;
 using Azure.Messaging.ServiceBus;
 using PostsContracts;
 
-namespace PostsService.Repositories;
+namespace PostsService.Services;
 
 public class ServiceBus : IServiceBus
 {
