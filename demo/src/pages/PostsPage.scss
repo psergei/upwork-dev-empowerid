@@ -1,0 +1,25 @@
+.blog {
+  display: flex;
+
+  .posts-list {
+    flex: 1;
+
+    .post-item {
+      border-radius: 5px;
+      margin: 4px 10px;
+      padding: 4px;
+      border: solid 1px grey;
+
+      .post-title:hover {
+        color: blue;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.new-post {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}

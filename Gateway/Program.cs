@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Threading.RateLimiting;
 using Gateway.Clients;
 using Gateway.Controllers;
@@ -10,16 +11,27 @@ using Polly.Extensions.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var originsConfig = builder.Configuration.GetValue<string>("AllowOrigins") ?? string.Empty;
+var origins = originsConfig.Split(",");
+builder.Services.AddCors(options =>
+  {
+    options.AddPolicy("CorsPolicy", builder => builder
+      .WithOrigins(origins)
+      .AllowAnyMethod()
+      .AllowAnyHeader());
+  });
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
 // Add authentication configuration, will be using JWT and Azure AD as requested
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
   .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAD"));
 builder.Services.AddAuthorization();
-builder.Services.AddCors();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IBlogUserService, BlogUserService>();
 
@@ -56,14 +68,6 @@ builder.Services.AddHttpClient<IBlogApiClient, BlogApiClient>()
 
 var app = builder.Build();
 
-app.UseCors(builder =>
-{
-  builder
-    .AllowAnyHeader()
-    .AllowAnyMethod()
-    .AllowAnyOrigin();
-});
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -73,8 +77,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseHttpsRedirection();
+app.UseRouting();
 
+app.UseAuthorization();
 app.MapGatewayControllerEndpoints(readDataPolicy, writeDataPolicy);
+
+app.UseCors("CorsPolicy");
 
 app.Run();
 

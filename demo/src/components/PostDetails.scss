@@ -1,0 +1,24 @@
+.post-details {
+  flex: 2;
+  border-left: solid 1px grey;
+  padding: 10px;
+
+  display:flex;
+  flex-direction: column;
+
+  .comments {
+
+    .comment {
+      border-bottom: solid 1px grey;
+
+      .comment-info {
+        font-size: 12px;
+        background-color: #e0e0e0;
+      }
+    }
+  }
+
+  textarea {
+    width: 100%;
+  }
+}

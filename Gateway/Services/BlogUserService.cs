@@ -20,7 +20,7 @@ public class BlogUserService: IBlogUserService
     {
       var user = _httpCtxAccessor.HttpContext?.User;
 
-      return user?.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+      return user?.FindFirstValue("name") ?? string.Empty;
     }
   }
 }

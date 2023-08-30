@@ -16,7 +16,7 @@ internal class FakePolicyEvaluator : IPolicyEvaluator
     var schemeName = "FakeScheme";
     principal.AddIdentity(new ClaimsIdentity(new []
     {
-      new Claim(ClaimTypes.NameIdentifier, "integration")
+      new Claim("name", "integration")
     }, schemeName));
 
     var ticket = new AuthenticationTicket(principal, new AuthenticationProperties(), schemeName);

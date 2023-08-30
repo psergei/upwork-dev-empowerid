@@ -1,0 +1,15 @@
+.navigation {
+  border-bottom: solid 1px grey;
+
+  .spacer {
+    flex: 1;
+  }
+
+  .navlink {
+    margin: 0 10px;
+  }
+
+  .username {
+    padding: 0 10px;
+  }
+}
