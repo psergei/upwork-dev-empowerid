@@ -18,7 +18,7 @@ export const PostDetails = ({ post }) => {
   const commentsNodes = details?.comments?.map(c => (
     <div className="comment" key={c.id}>
       <div className="comment-body">{c.content}</div>
-      <div className="comment-info">by {c.author} on {c.createdDate}</div>
+      <div className="comment-info">by {c.author} on {new Date(c.createdDate).toLocaleString()}</div>
     </div>
   ));
 

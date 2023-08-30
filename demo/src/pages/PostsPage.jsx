@@ -18,6 +18,17 @@ export const PostsPage = () => {
     setSelectedPost(post);
   };
 
+  const handleDelete = (post) => {
+    execute('DELETE', resources.api.endpoint + `/posts/${post.id}`)
+    .then(response => {
+      setSelectedPost(null);
+      const index = posts.indexOf(post);
+      posts.splice(index, 1);
+      setPosts(posts);
+    })
+    .catch(err => console.log(err.message));
+  }
+
   useEffect(() => {
     if (!posts) {
       execute('GET', resources.api.endpoint + '/posts')
@@ -28,7 +39,11 @@ export const PostsPage = () => {
 
   const postsNodes = posts?.map(p => (
     <div className="post-item" key={p.id}>
-      <div className="post-title" onClick={() => handlePostSelect(p)}>{p.title}</div>
+      <div className="post-title" onClick={() => handlePostSelect(p)}>{p.title}
+        <div className="post-info">by {p.author} on {new Date(p.createdDate).toLocaleString()}</div>
+      </div>
+      
+      <button onClick={() => handleDelete(p)}>Delete</button>
     </div>
   ));
 
