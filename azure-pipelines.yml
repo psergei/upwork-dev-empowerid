@@ -40,6 +40,11 @@ stages:
         tags: |
           $(tag)
 
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
     - task: Docker@2
       displayName: Build and push an PostsService
       inputs:
@@ -50,6 +55,11 @@ stages:
         tags: |
           $(tag)
 
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
     - task: Docker@2
       displayName: Build and push an CommentsService
       inputs:
@@ -60,6 +70,11 @@ stages:
         tags: |
           $(tag)
 
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
     - task: Docker@2
       displayName: Build and push an Gateway 
       inputs:
