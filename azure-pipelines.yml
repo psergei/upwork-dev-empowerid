@@ -25,7 +25,7 @@ stages:
 - stage: Build
   displayName: Build stage
   jobs:
-  - job: Build
+  - job: Build-Gateway
     displayName: Build
     pool:
       vmImage: $(vmImageName)
@@ -40,7 +40,7 @@ stages:
         tags: |
           $(tag)
 
-  - job: Build
+  - job: Build-PostsService
     displayName: Build
     pool:
       vmImage: $(vmImageName)
@@ -55,7 +55,7 @@ stages:
         tags: |
           $(tag)
 
-  - job: Build
+  - job: Build-CommentsService
     displayName: Build
     pool:
       vmImage: $(vmImageName)
@@ -70,7 +70,7 @@ stages:
         tags: |
           $(tag)
 
-  - job: Build
+  - job: Build-demo
     displayName: Build
     pool:
       vmImage: $(vmImageName)
