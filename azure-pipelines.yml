@@ -14,7 +14,6 @@ variables:
   dockerRegistryServiceConnection: 'af2cbec6-e307-42a1-9def-4e4dabeac522'
   imageRepository: 'psergeiupworkdevempowerid'
   containerRegistry: 'prognimakdevaksregistry.azurecr.io'
-  dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'prognimakdevaksregistry37fd-auth'
 
@@ -32,11 +31,41 @@ stages:
       vmImage: $(vmImageName)
     steps:
     - task: Docker@2
-      displayName: Build and push an image to container registry
+      displayName: Build and push an Gateway 
       inputs:
         command: buildAndPush
         repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
+        dockerfile: Gateway/Dockefile
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Build and push an PostsService
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: PostsService/Dockerfile
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Build and push an CommentsService
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: CommentsService/Dockerfile
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Build and push an Gateway 
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: demo/Dockerfile
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
