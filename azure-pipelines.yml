@@ -1,7 +1,3 @@
-# Deploy to Azure Kubernetes Service
-# Build and push image to Azure Container Registry; Deploy to Azure Kubernetes Service
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 trigger:
 - master
 
@@ -14,30 +10,18 @@ variables:
   dockerRegistryServiceConnection: 'af2cbec6-e307-42a1-9def-4e4dabeac522'
   imageRepository: 'psergeiupworkdevempowerid'
   containerRegistry: 'prognimakdevaksregistry.azurecr.io'
-  tag: '$(Build.BuildId)'
   imagePullSecret: 'prognimakdevaksregistry37fd-auth'
 
+pool:
   # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+  vmImage: 'ubuntu-latest'
 
-
-stages:
-- stage: Build
-  displayName: Build stage
-  jobs:
-  - job: Build_demo
-    displayName: Build
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'prognimakdevaksregistry'
-        command: 'buildAndPush'
-        Dockerfile: 'demo/Dockerfile'
-        buildContext: 'demo'
-
-    - upload: manifests
-      artifact: manifests
+steps:
+- task: Docker@2
+  inputs:
+    containerRegistry: 'prognimakdevaksregistry'
+    command: 'buildAndPush'
+    Dockerfile: 'demo/Dockerfile'
+    buildContext: 'demo'
 
 
