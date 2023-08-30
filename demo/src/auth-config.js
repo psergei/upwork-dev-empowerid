@@ -12,7 +12,7 @@ export const authConfig = {
 
 export const resources = {
   api: {
-    endpoint: 'https://localhost:5443/api',
+    endpoint: process.env.REACT_APP_API_URL,
     scopes: {
       default: ['api://de3907b0-42c1-48b5-a436-c60cfb4687ef/default'] 
     }
