@@ -56,7 +56,7 @@ stages:
       inputs:
         command: buildAndPush
         repository: $(imageRepository)-posts-service
-        dockerfile: PostsService/Gateway
+        dockerfile: PostsService/Dockerfile
         containerRegistry: $(dockerRegistryServiceConnection)
         buildContext: $(Build.Repository.LocalPath)
         tags: |
