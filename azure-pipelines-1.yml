@@ -11,9 +11,8 @@ resources:
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'ee30dca7-c8ab-42dd-b0af-93f7dd8d5bb8'
-  imageRepository: 'psergeiupworkdevempoweriddemo'
+  imageRepository: 'psergeiupworkdevempowerid'
   containerRegistry: 'prognimakdevaksregistry.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/demo/Dockerfile'
   tag: '$(Build.BuildId)'
 
   # Agent VM image name
@@ -29,11 +28,37 @@ stages:
       vmImage: $(vmImageName)
     steps:
     - task: Docker@2
+      displayName: Build and push a website image to container registry
+      inputs:
+        command: buildAndPush
+        repository: 'website'
+        dockerfile: '$(Build.SourcesDirectory)/demo/Dockerfile'
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: $(tag)
+
+    - task: Docker@2
+      displayName: Build and push a Gateway image to container registry
+      inputs:
+        command: buildAndPush
+        repository: 'website'
+        dockerfile: '$(Build.SourcesDirectory)/Gateway/Dockerfile'
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: $(tag)
+
+    - task: Docker@2
+      displayName: Build and push an PostsService image to container registry
+      inputs:
+        command: buildAndPush
+        repository: 'website'
+        dockerfile: '$(Build.SourcesDirectory)/demo/Dockerfile'
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: $(tag)
+
+    - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
         command: buildAndPush
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
+        repository: 'website'
+        dockerfile: '$(Build.SourcesDirectory)/demo/Dockerfile'
         containerRegistry: $(dockerRegistryServiceConnection)
-        tags: |
-          $(tag)
+        tags: $(tag)
