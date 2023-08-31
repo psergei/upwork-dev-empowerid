@@ -10,16 +10,16 @@ spec:
   rules:
   - http:
       paths:
-      - path: /(api/.*)
-        pathType: Prefix
+      - path: /api/
+        pathType: Exact
         backend:
           service:
             name: gateway
             port:
               number: 80
          
-      - path: /(.*)
-        pathType: Prefix
+      - path: /
+        pathType: Exact
         backend:
           service:
             name: website

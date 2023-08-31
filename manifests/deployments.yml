@@ -67,7 +67,7 @@ spec:
           env:
           - name: QueueName
             value: BlogPosts
-          - name: ConnectionString__Database
+          - name: ConnectionStrings__Database
             valueFrom:
              secretKeyRef:
                name: credentials
@@ -101,7 +101,7 @@ spec:
           env:
           - name: QueueName
             value: BlogPosts
-          - name: ConnectionString__Database
+          - name: ConnectionStrings__Database
             valueFrom:
              secretKeyRef:
                name: credentials
