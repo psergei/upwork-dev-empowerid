@@ -73,6 +73,40 @@ stages:
         tags: |
           $(tag)
 
-    - upload: manifests
-      artifact: manifests
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'psergeiupworkdevempowerid-1653.blog'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: createSecret
+              secretName: $(imagePullSecret)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              manifests: |
+                $(Build.Repository.LocalPath)/manifests/deployment.yml
+                $(Build.Repository.LocalPath)/manifests/service.yml
+                $(Build.Repository.LocalPath)/manifests/ingress.yml
+              imagePullSecrets: |
+                $(imagePullSecret)
+              containers: |
+                $(containerRegistry)/$(imageRepository)-website:$(tag)
+                $(containerRegistry)/$(imageRepository)-gateway:$(tag)
+                $(containerRegistry)/$(imageRepository)-posts-service:$(tag)
+                $(containerRegistry)/$(imageRepository)-comments-service:$(tag)
 
