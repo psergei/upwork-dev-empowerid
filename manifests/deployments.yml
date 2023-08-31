@@ -1,0 +1,82 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: website
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: website
+  template:
+    metadata:
+      labels:
+        app: website
+    spec:
+      containers:
+        - name: website
+          image: prognimakdevaksregistry.azurecr.io/psergeiupworkdevempowerid-website
+          ports:
+          - containerPort: 80
+
+---
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+        - name: gateway
+          image: prognimakdevaksregistry.azurecr.io/psergeiupworkdevempowerid-gateway
+          ports:
+          - containerPort: 80
+
+---
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: posts-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: posts-service
+  template:
+    metadata:
+      labels:
+        app: posts-service
+    spec:
+      containers:
+        - name: posts-service
+          image: prognimakdevaksregistry.azurecr.io/psergeiupworkdevempowerid-posts-service
+          ports:
+          - containerPort: 80
+
+---
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: comments-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: comments-service
+  template:
+    metadata:
+      labels:
+        app: comments-service
+    spec:
+      containers:
+        - name: comments-service
+          image: prognimakdevaksregistry.azurecr.io/psergeiupworkdevempowerid-comments-service
+          ports:
+          - containerPort: 80
