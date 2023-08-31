@@ -73,6 +73,13 @@ stages:
         tags: |
           $(tag)
 
+    - task: PublishBuildArtifacts@1
+      displayName: Publish K8s manifests
+      inputs:
+        PathtoPublish: '$(Build.Repository.LocalPath)/manifests'
+        ArtifactName: 'manifests'
+        publishLocation: 'Container'
+
 - stage: Deploy
   displayName: Deploy stage
   dependsOn: Build
@@ -99,9 +106,9 @@ stages:
             inputs:
               action: deploy
               manifests: |
-                $(Build.Repository.LocalPath)/manifests/deployments.yml
-                $(Build.Repository.LocalPath)/manifests/services.yml
-                $(Build.Repository.LocalPath)/manifests/ingress.yml
+                $(Pipeline.Workspace)/manifests/deployments.yml
+                $(Pipeline.Workspace)/manifests/services.yml
+                $(Pipeline.Workspace)/manifests/ingress.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
