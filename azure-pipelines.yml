@@ -99,8 +99,8 @@ stages:
             inputs:
               action: deploy
               manifests: |
-                $(Build.Repository.LocalPath)/manifests/deployment.yml
-                $(Build.Repository.LocalPath)/manifests/service.yml
+                $(Build.Repository.LocalPath)/manifests/deployments.yml
+                $(Build.Repository.LocalPath)/manifests/services.yml
                 $(Build.Repository.LocalPath)/manifests/ingress.yml
               imagePullSecrets: |
                 $(imagePullSecret)
